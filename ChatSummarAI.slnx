@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ChatSummarAI.API/ChatSummarAI.API.csproj" />
+  <Project Path="ChatSummarAI.Core/ChatSummarAI.Core.csproj" />
+  <Project Path="ChatSummarAI.Sqlite/ChatSummarAI.Sqlite.csproj" />
+</Solution>
