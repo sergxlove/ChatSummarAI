@@ -1,4 +1,5 @@
-﻿using ChatSummarAI.Core.Models;
+﻿using ChatSummarAI.Core.Abstractions;
+using ChatSummarAI.Core.Models;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -6,12 +7,12 @@ using System.Text;
 
 namespace ChatSummarAI.Core.Services
 {
-    public class AiAnalyzeService
+    public class AiAnalyzeService : IAiAnalyzeService
     {
-        private Kernel _kernel;
-        private ChatHistory _history;
+        private Kernel? _kernel;
+        private ChatHistory? _history;
         private OpenAIPromptExecutionSettings _settings;
-        private IChatCompletionService _chat;
+        private IChatCompletionService? _chat;
         private string _currentModelId = "google/gemma-4-31b-it";
         private string _apiKey = string.Empty;
         private readonly SemaphoreSlim _rateLimiter = new SemaphoreSlim(1, 1);
@@ -74,15 +75,18 @@ namespace ChatSummarAI.Core.Services
         private void InitializeChatHistory()
         {
             _history = new ChatHistory();
-            _history.AddSystemMessage("Ты — помощник сотрудников компании. " +
-                "Ниже приведён полный текст документа (инструкция/регламент). " +
-                "Отвечай на вопросы сотрудников, используя ТОЛЬКО этот документ. " +
+            _history.AddSystemMessage("Ты — ассистент, который делает краткие пересказы Telegram-чатов. " +
+                "Ниже приведена история сообщений из чата. " +
+                "Твоя задача — сделать краткий, но информативный пересказ диалога. " +
                 "ПРАВИЛА: " +
-                "1. Если ответа нет в документе — скажи: 'В документе нет такой информации'. " +
-                "2. ОБЯЗАТЕЛЬНО указывай, из какого раздела/пункта взят ответ. " +
-                "3. Если информация в разных местах — собери её и укажи все пункты. " +
-                "Отвечай на русском языке. Без символов разметки, только текст. " +
-                "Вот текст документа: " +
+                "1. Выдели основные темы обсуждения (2-5 пунктов). " +
+                "2. Если есть важные решения, договорённости или вопросы — обязательно укажи их. " +
+                "3. Укажи, кто из участников был наиболее активен (если это важно). " +
+                "4. Пересказ должен быть кратким (3-5 предложений или короткий список). " +
+                "5. Сохраняй нейтральный тон, не добавляй своё мнение. " +
+                "6. Если сообщений слишком много — сделай общий пересказ, не вдаваясь в детали. " +
+                "Отвечай на русском языке. Без символов разметки (маркдаун, жирный текст и т.п.). " +
+                "Вот сообщения из чата: " +
                 $"");
         }
 
@@ -98,17 +102,17 @@ namespace ChatSummarAI.Core.Services
 
                     _currentModelId = model;
                     InitializeKernel();
-                    InitializeChatHistory();
                 }
+                InitializeChatHistory();
 
-                _history.AddUserMessage(message);
+                _history!.AddUserMessage(message);
 
                 Exception? lastException = null;
                 for (int attempt = 0; attempt < _maxRetries; attempt++)
                 {
                     try
                     {
-                        var result = await _chat.GetChatMessageContentsAsync(_history, _settings, _kernel, token);
+                        var result = await _chat!.GetChatMessageContentsAsync(_history, _settings, _kernel, token);
 
                         if (result.Count > 0 && result[^1] != null)
                         {
@@ -166,9 +170,9 @@ namespace ChatSummarAI.Core.Services
                     InitializeKernel();
                     InitializeChatHistory();
 
-                    _history.AddUserMessage(message);
+                    _history!.AddUserMessage(message);
 
-                    var result = await _chat.GetChatMessageContentsAsync(_history, _settings, _kernel, token);
+                    var result = await _chat!.GetChatMessageContentsAsync(_history, _settings, _kernel, token);
 
                     if (result.Count > 0 && result[^1] != null)
                     {

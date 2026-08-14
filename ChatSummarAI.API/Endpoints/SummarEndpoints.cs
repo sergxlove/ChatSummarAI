@@ -1,4 +1,6 @@
 ﻿using ChatSummarAI.API.Requests;
+using ChatSummarAI.Core.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 namespace ChatSummarAI.API.Endpoints
@@ -7,7 +9,8 @@ namespace ChatSummarAI.API.Endpoints
     {
         public static IEndpointRouteBuilder MapSummarEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapPost("/api/setting/tg", (TelegramRequest request) =>
+            app.MapPost("/api/setting/tg", async (TelegramRequest request, 
+                CancellationToken token) =>
             {
                 try
                 {
@@ -16,8 +19,34 @@ namespace ChatSummarAI.API.Endpoints
                         return Results.Ok();
                     var json = JsonSerializer.Serialize(request, 
                         new JsonSerializerOptions { WriteIndented = true });
-                    File.WriteAllText(filePath, json);
+                    await File.WriteAllTextAsync(filePath, json, token);
                     return Results.Ok();
+                }
+                catch
+                {
+                    return Results.InternalServerError();
+                }
+            });
+
+            app.MapGet("/api/ai/models", (HttpContext context, 
+                [FromServices] IAiAnalyzeService aiAnalyzeService) =>
+            {
+                try
+                {
+                    return Results.Ok(aiAnalyzeService.GetAvailableModels());
+                }
+                catch
+                {
+                    return Results.InternalServerError();
+                }
+            });
+
+            app.MapGet("/api/ai/current", (HttpContext context,
+                [FromServices] IAiAnalyzeService aiAnalyzeService) =>
+            {
+                try
+                {
+                    return Results.Ok(aiAnalyzeService.GetCurrentModel());
                 }
                 catch
                 {
