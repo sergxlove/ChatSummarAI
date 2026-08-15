@@ -16,25 +16,25 @@ namespace ChatSummarAI.Core.Services
         private string _currentModelId = "google/gemma-4-31b-it";
         private string _apiKey = string.Empty;
         private readonly SemaphoreSlim _rateLimiter = new SemaphoreSlim(1, 1);
-        private readonly Dictionary<string, ModelConfig> _availableModels;
+        private readonly Dictionary<string, AiSetting> _availableModels;
         private readonly int _maxRetries = 3;
         private readonly int _baseDelayMs = 2000;
 
         public AiAnalyzeService()
         {
-            _availableModels = new Dictionary<string, ModelConfig>
+            _availableModels = new Dictionary<string, AiSetting>
             {
-                ["google/gemma-4-31b-it"] = new ModelConfig
+                ["google/gemma-4-31b-it"] = new AiSetting
                 {
                     ModelId = "google/gemma-4-31b-it:free",
                     Endpoint = new Uri("https://openrouter.ai/api/v1"),
                 },
-                ["poolside/laguna-m.1"] = new ModelConfig
+                ["poolside/laguna-m.1"] = new AiSetting
                 {
                     ModelId = "poolside/laguna-m.1:free",
                     Endpoint = new Uri("https://openrouter.ai/api/v1"),
                 },
-                ["nvidia/nemotron-3-super-120b-a12b"] = new ModelConfig
+                ["nvidia/nemotron-3-super-120b-a12b"] = new AiSetting
                 {
                     ModelId = "nvidia/nemotron-3-super-120b-a12b:free",
                     Endpoint = new Uri("https://openrouter.ai/api/v1"),
