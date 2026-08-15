@@ -1,10 +1,10 @@
-﻿namespace ChatSummarAI.Core.Models
+﻿namespace ChatSummarAI.API.Requests
 {
-    public class AiSetting
+    public class AiRequest
     {
         public string Provider { get; set; } = string.Empty;
         public string ApiKey { get; set; } = string.Empty;
         public string ModelId { get; set; } = string.Empty;
-        public Uri? Endpoint { get; set; }
+        public string Endpoint { get; set; } = string.Empty;
     }
 }

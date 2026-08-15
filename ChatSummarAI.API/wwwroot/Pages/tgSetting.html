@@ -91,6 +91,9 @@
 
         .settings-header {
             margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
             .settings-header h2 {
@@ -103,6 +106,16 @@
                 color: #7a8aa3;
                 font-size: 15px;
             }
+
+        .step-counter {
+            font-size: 13px;
+            color: #4a5a6e;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            white-space: nowrap;
+        }
 
         .form-group {
             margin-bottom: 22px;
@@ -301,6 +314,15 @@
                 padding: 28px 20px;
                 border-radius: 16px;
             }
+
+            .settings-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .step-counter {
+                align-self: flex-start;
+            }
         }
 
         @media (max-width: 480px) {
@@ -317,17 +339,23 @@
 <body>
     <nav class="navbar">
         <a href="#" class="navbar-brand">
-            
+            <div class="icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
             <div class="name">Chat<span>Summar</span></div>
         </a>
     </nav>
+
     <div class="main">
 
         <div class="settings-card">
 
             <div class="settings-header">
-                <h2>Настройки Telegram</h2>
-                <p>Введите данные для подключения вашего бота</p>
+                <div>
+                    <h2>Настройки Telegram</h2>
+                    <p>Введите данные для подключения вашего бота</p>
+                </div>
+                <span class="step-counter">Шаг 1 / 2</span>
             </div>
 
             <form id="settingsForm" novalidate>
@@ -400,8 +428,9 @@
         </div>
 
     </div>
+
     <script>
-        (function() {
+        (function () {
             'use strict';
 
             const form = document.getElementById('settingsForm');
@@ -412,14 +441,16 @@
             const status = document.getElementById('status');
             const statusText = document.getElementById('statusText');
             const toggleBtn = document.getElementById('toggleBotToken');
+
             let isVisible = false;
-            toggleBtn.addEventListener('click', function() {
+            toggleBtn.addEventListener('click', function () {
                 isVisible = !isVisible;
                 botTokenInput.type = isVisible ? 'text' : 'password';
                 toggleBtn.innerHTML = isVisible
                     ? '<i class="fas fa-eye-slash"></i>'
                     : '<i class="fas fa-eye"></i>';
             });
+
             function showStatus(message, type) {
                 status.className = 'status show ' + type;
                 statusText.textContent = message;
@@ -440,7 +471,7 @@
                 submitBtn.disabled = isLoading;
             }
 
-            form.addEventListener('submit', async function(e) {
+            form.addEventListener('submit', async function (e) {
                 e.preventDefault();
                 hideStatus();
 
@@ -492,7 +523,7 @@
             });
 
             [botTokenInput, chatIdInput, adminIdInput].forEach(input => {
-                input.addEventListener('keydown', function(e) {
+                input.addEventListener('keydown', function (e) {
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         form.dispatchEvent(new Event('submit'));

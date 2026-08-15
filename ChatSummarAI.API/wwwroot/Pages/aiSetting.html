@@ -1,0 +1,820 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatSummar - AI Settings</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0b0f1a;
+            color: #e8edf5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(18, 26, 40, 0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0 32px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #e8edf5;
+        }
+
+            .navbar-brand .icon {
+                width: 38px;
+                height: 38px;
+                background: linear-gradient(135deg, #0088ff, #0055cc);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                color: #fff;
+                box-shadow: 0 4px 14px rgba(0, 119, 255, 0.3);
+            }
+
+            .navbar-brand .name {
+                font-size: 22px;
+                font-weight: 700;
+                letter-spacing: -0.3px;
+            }
+
+                .navbar-brand .name span {
+                    font-weight: 300;
+                    opacity: 0.5;
+                }
+
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 24px;
+        }
+
+        .settings-card {
+            width: 100%;
+            max-width: 640px;
+            background: rgba(18, 26, 40, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px 36px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .settings-header {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+            .settings-header h2 {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 6px;
+            }
+
+            .settings-header p {
+                color: #7a8aa3;
+                font-size: 15px;
+            }
+
+        .step-counter {
+            font-size: 13px;
+            color: #4a5a6e;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-size: 13px;
+                font-weight: 600;
+                color: #8899b0;
+                margin-bottom: 6px;
+                letter-spacing: 0.2px;
+            }
+
+                .form-group label i {
+                    margin-right: 8px;
+                    color: #4fc3ff;
+                    width: 18px;
+                }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+            .input-wrapper input {
+                width: 100%;
+                padding: 12px 16px;
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.07);
+                border-radius: 10px;
+                color: #e8edf5;
+                font-size: 15px;
+                font-family: inherit;
+                transition: all 0.25s ease;
+                outline: none;
+            }
+
+                .input-wrapper input::placeholder {
+                    color: #3a4a5e;
+                    font-size: 14px;
+                }
+
+                .input-wrapper input:focus {
+                    border-color: #0088ff;
+                    background: rgba(0, 136, 255, 0.06);
+                    box-shadow: 0 0 0 4px rgba(0, 136, 255, 0.08);
+                }
+
+                .input-wrapper input:hover {
+                    border-color: rgba(255, 255, 255, 0.12);
+                }
+
+            .input-wrapper .toggle-visibility {
+                position: absolute;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: #4a5a6e;
+                cursor: pointer;
+                font-size: 15px;
+                padding: 4px;
+                transition: color 0.2s;
+            }
+
+                .input-wrapper .toggle-visibility:hover {
+                    color: #8899b0;
+                }
+
+        .hint {
+            font-size: 12px;
+            color: #3a4a5e;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .hint a {
+                color: #4fc3ff;
+                text-decoration: none;
+            }
+
+                .hint a:hover {
+                    text-decoration: underline;
+                }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0088ff, #0055cc);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 136, 255, 0.25);
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 32px rgba(0, 136, 255, 0.35);
+                background: linear-gradient(135deg, #1a8eff, #0066dd);
+            }
+
+            .btn-primary:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+                transform: none !important;
+                box-shadow: none !important;
+            }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.06);
+            color: #8899b0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+            .btn-secondary:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: #e8edf5;
+            }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00c853, #00a844);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 200, 83, 0.25);
+        }
+
+            .btn-success:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 32px rgba(0, 200, 83, 0.35);
+                background: linear-gradient(135deg, #00d85a, #00b84a);
+            }
+
+        .btn-danger {
+            background: rgba(255, 70, 70, 0.12);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 70, 70, 0.12);
+            flex: 0 0 auto;
+            padding: 8px 12px;
+        }
+
+            .btn-danger:hover {
+                background: rgba(255, 70, 70, 0.2);
+                border-color: rgba(255, 70, 70, 0.25);
+            }
+
+        .btn .spinner {
+            display: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        .btn.loading .spinner {
+            display: inline-block;
+        }
+
+        .btn.loading .btn-text {
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .model-list {
+            margin-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 20px;
+        }
+
+        .model-list-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8899b0;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .model-list-title .count {
+                background: rgba(255, 255, 255, 0.06);
+                padding: 1px 10px;
+                border-radius: 12px;
+                font-size: 12px;
+                color: #4a5a6e;
+            }
+
+        .model-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.2s;
+        }
+
+            .model-item:hover {
+                background: rgba(255, 255, 255, 0.06);
+                border-color: rgba(255, 255, 255, 0.08);
+            }
+
+            .model-item .model-info {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .model-item .model-name {
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .model-item .model-provider {
+                font-size: 12px;
+                color: #4a5a6e;
+            }
+
+                .model-item .model-provider i {
+                    margin-right: 4px;
+                }
+
+            .model-item .model-actions {
+                display: flex;
+                gap: 6px;
+            }
+
+        .empty-models {
+            text-align: center;
+            color: #3a4a5e;
+            padding: 20px 0;
+            font-size: 14px;
+        }
+
+            .empty-models i {
+                font-size: 28px;
+                display: block;
+                margin-bottom: 10px;
+                opacity: 0.3;
+            }
+
+        .status {
+            margin-top: 18px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .status.show {
+                display: flex;
+            }
+
+            .status.success {
+                background: rgba(0, 200, 83, 0.08);
+                border: 1px solid rgba(0, 200, 83, 0.12);
+                color: #4cdb8c;
+            }
+
+            .status.error {
+                background: rgba(255, 70, 70, 0.08);
+                border: 1px solid rgba(255, 70, 70, 0.12);
+                color: #ff6b6b;
+            }
+
+            .status.info {
+                background: rgba(0, 180, 255, 0.08);
+                border: 1px solid rgba(0, 180, 255, 0.12);
+                color: #4fc3ff;
+            }
+
+            .status i {
+                font-size: 18px;
+            }
+
+        @media (max-width: 640px) {
+            .navbar {
+                padding: 0 16px;
+                height: 60px;
+            }
+
+            .navbar-brand .name {
+                font-size: 18px;
+            }
+
+            .settings-card {
+                padding: 28px 20px;
+                border-radius: 16px;
+            }
+
+            .btn-row {
+                flex-direction: column;
+            }
+
+            .settings-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .step-counter {
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-card {
+                padding: 24px 16px;
+            }
+
+            .settings-header h2 {
+                font-size: 20px;
+            }
+
+            .model-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+                .model-item .model-actions {
+                    align-self: flex-end;
+                }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">
+            <div class="icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="name">Chat<span>Summar</span></div>
+        </a>
+    </nav>
+    <div class="main">
+
+        <div class="settings-card">
+
+            <div class="settings-header">
+                <div>
+                    <h2>Настройка AI</h2>
+                    <p>Добавьте модели для пересказа чатов</p>
+                </div>
+                <span class="step-counter">Шаг 2 / 2</span>
+            </div>
+            <form id="settingsForm" novalidate>
+                <div class="form-group">
+                    <label for="provider">
+                        <i class="fas fa-cloud"></i> Провайдер
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text"
+                               id="provider"
+                               placeholder="openai, yandex, ollama, openrouter, deepseek"
+                               required />
+                    </div>
+                    <div class="hint">
+                        <i class="fas fa-info-circle"></i>
+                        Например: openai, yandex, ollama, openrouter, deepseek
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="apiKey">
+                        <i class="fas fa-key"></i> API Key
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="password"
+                               id="apiKey"
+                               placeholder="sk-..."
+                               required />
+                        <button type="button"
+                                class="toggle-visibility"
+                                id="toggleApiKey"
+                                aria-label="Toggle visibility">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="modelId">
+                        <i class="fas fa-cube"></i> Model ID
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text"
+                               id="modelId"
+                               placeholder="gpt-3.5-turbo"
+                               required />
+                    </div>
+                    <div class="hint">
+                        <i class="fas fa-info-circle"></i>
+                        Например: gpt-3.5-turbo, yandexgpt/latest, llama2
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="endpoint">
+                        <i class="fas fa-link"></i> Endpoint <span style="color:#4a5a6e;font-weight:400;">(опционально)</span>
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="text"
+                               id="endpoint"
+                               placeholder="https://api.openai.com/v1" />
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-primary" id="addBtn">
+                        <span class="btn-text"><i class="fas fa-plus"></i> Добавить</span>
+                        <span class="spinner"></span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="skipBtn">
+                        <span class="btn-text"><i class="fas fa-forward"></i> Пропустить</span>
+                    </button>
+                </div>
+
+            </form>
+
+            <div class="status" id="status">
+                <i class="fas fa-check-circle"></i>
+                <span id="statusText">Готово!</span>
+            </div>
+            <div class="model-list" id="modelList">
+                <div class="model-list-title">
+                    <i class="fas fa-list"></i> Добавленные модели
+                    <span class="count" id="modelCount">0</span>
+                </div>
+                <div id="modelsContainer">
+                    <div class="empty-models">
+                        <i class="fas fa-cube"></i>
+                        Нет добавленных моделей
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+            const form = document.getElementById('settingsForm');
+            const provider = document.getElementById('provider');
+            const apiKey = document.getElementById('apiKey');
+            const modelId = document.getElementById('modelId');
+            const endpoint = document.getElementById('endpoint');
+            const addBtn = document.getElementById('addBtn');
+            const skipBtn = document.getElementById('skipBtn');
+            const status = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            const modelsContainer = document.getElementById('modelsContainer');
+            const modelCount = document.getElementById('modelCount');
+            const currentStep = document.getElementById('currentStep');
+            const totalSteps = document.getElementById('totalSteps');
+            const toggleBtn = document.getElementById('toggleApiKey');
+            let models = [];
+            let isSubmitting = false;
+            let isVisible = false;
+            toggleBtn.addEventListener('click', function() {
+                isVisible = !isVisible;
+                apiKey.type = isVisible ? 'text' : 'password';
+                toggleBtn.innerHTML = isVisible ?
+                    '<i class="fas fa-eye-slash"></i>' :
+                    '<i class="fas fa-eye"></i>';
+            });
+
+            function showStatus(message, type) {
+                status.className = 'status show ' + type;
+                statusText.textContent = message;
+                clearTimeout(window._statusTimeout);
+                if (type === 'success' || type === 'info') {
+                    window._statusTimeout = setTimeout(() => {
+                        status.classList.remove('show');
+                    }, 5000);
+                }
+            }
+
+            function hideStatus() {
+                status.classList.remove('show');
+            }
+
+            function renderModels() {
+                if (models.length === 0) {
+                    modelsContainer.innerHTML = `
+                        <div class="empty-models">
+                            <i class="fas fa-cube"></i>
+                            Нет добавленных моделей
+                        </div>
+                    `;
+                    modelCount.textContent = '0';
+                    return;
+                }
+
+                let html = '';
+                models.forEach((model, index) => {
+                    html += `
+                        <div class="model-item">
+                            <div class="model-info">
+                                <div class="model-name">${escapeHtml(model.modelId)}</div>
+                                <div class="model-provider">
+                                    <i class="fas fa-cloud"></i> ${escapeHtml(model.provider)}
+                                    ${model.endpoint ? ` • ${escapeHtml(model.endpoint)}` : ''}
+                                </div>
+                            </div>
+                            <div class="model-actions">
+                                <button class="btn btn-danger" data-index="${index}" title="Удалить">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                modelsContainer.innerHTML = html;
+                modelCount.textContent = models.length;
+
+                document.querySelectorAll('.btn-danger').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        models.splice(index, 1);
+                        renderModels();
+                        updateStepCounter();
+                        hideStatus();
+                        showStatus('Модель удалена', 'info');
+                    });
+                });
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function updateStepCounter() {
+                const total = models.length + 1;
+                const step = Math.min(models.length + 1, total);
+                currentStep.textContent = step;
+                totalSteps.textContent = total;
+
+                if (models.length > 0) {
+                    skipBtn.innerHTML = '<span class="btn-text"><i class="fas fa-check"></i> Далее</span>';
+                    skipBtn.className = 'btn btn-success';
+                } else {
+                    skipBtn.innerHTML = '<span class="btn-text"><i class="fas fa-forward"></i> Пропустить</span>';
+                    skipBtn.className = 'btn btn-secondary';
+                }
+            }
+
+            function addModel() {
+                const prov = provider.value.trim();
+                const key = apiKey.value.trim();
+                const model = modelId.value.trim();
+                const ep = endpoint.value.trim();
+
+                if (!prov) {
+                    showStatus('Введите провайдера', 'error');
+                    provider.focus();
+                    return false;
+                }
+                if (!key) {
+                    showStatus('Введите API Key', 'error');
+                    apiKey.focus();
+                    return false;
+                }
+                if (!model) {
+                    showStatus('Введите Model ID', 'error');
+                    modelId.focus();
+                    return false;
+                }
+
+                const exists = models.some(m =>
+                    m.provider === prov &&
+                    m.modelId === model &&
+                    m.apiKey === key
+                );
+
+                if (exists) {
+                    showStatus('Такая модель уже добавлена', 'error');
+                    return false;
+                }
+
+                models.push({
+                    provider: prov,
+                    apiKey: key,
+                    modelId: model,
+                    endpoint: ep || ''
+                });
+
+                provider.value = '';
+                apiKey.value = '';
+                modelId.value = '';
+                endpoint.value = '';
+
+                renderModels();
+                updateStepCounter();
+                hideStatus();
+                showStatus('Модель добавлена!', 'success');
+
+                return true;
+            }
+
+            async function submitModels() {
+                if (isSubmitting) return;
+                if (models.length === 0) {
+                    showStatus('Добавьте хотя бы одну модель', 'error');
+                    return;
+                }
+
+                isSubmitting = true;
+                addBtn.classList.add('loading');
+                addBtn.disabled = true;
+                skipBtn.disabled = true;
+
+                try {
+                    const response = await fetch('/api/setting/ai', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ models: models })
+                    });
+
+                    if (response.ok) {
+                        showStatus('✅ Все модели успешно сохранены!', 'success');
+                        models = [];
+                        renderModels();
+                        updateStepCounter();
+                    } else {
+                        const text = await response.text();
+                        showStatus('❌ Ошибка: ' + (text || 'Неизвестная ошибка'), 'error');
+                    }
+                } catch {
+                    showStatus('❌ Ошибка соединения с сервером', 'error');
+                } finally {
+                    isSubmitting = false;
+                    addBtn.classList.remove('loading');
+                    addBtn.disabled = false;
+                    skipBtn.disabled = false;
+                }
+            }
+
+            addBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideStatus();
+                addModel();
+            });
+
+            skipBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                hideStatus();
+
+                if (models.length > 0) {
+                    submitModels();
+                } else {
+                    showStatus('Настройка AI пропущена. Вы можете вернуться позже.', 'info');
+                }
+            });
+
+            [provider, apiKey, modelId, endpoint].forEach(input => {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        hideStatus();
+                        addModel();
+                    }
+                });
+            });
+
+            provider.focus();
+            renderModels();
+            updateStepCounter();
+
+        })();
+    </script>
+
+</body>
+</html>

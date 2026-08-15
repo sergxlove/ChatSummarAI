@@ -28,6 +28,12 @@ namespace ChatSummarAI.API.Endpoints
                 }
             });
 
+            app.MapPost("/api/setting/ai", async (AiRequest request,
+                CancellationToken token) =>
+            {
+
+            });
+
             app.MapGet("/api/ai/models", (HttpContext context, 
                 [FromServices] IAiAnalyzeService aiAnalyzeService) =>
             {
