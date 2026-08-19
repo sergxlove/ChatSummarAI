@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SemanticKernel" Version="1.79.0" />
     <PackageReference Include="Microsoft.SemanticKernel.Core" Version="1.79.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.22.0" />
   </ItemGroup>
 
 </Project>
