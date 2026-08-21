@@ -8,7 +8,16 @@ namespace ChatSummarAI.Sqlite.Configurations
     {
         public void Configure(EntityTypeBuilder<ChatMessage> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("ChatMessage");
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.UserId)
+                .IsRequired();
+            builder.Property(x => x.Username)
+                .IsRequired();
+            builder.Property(x => x.Text)
+                .IsRequired();
+            builder.Property(x => x.Date)
+                .IsRequired();
         }
     }
 }
