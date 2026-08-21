@@ -50,9 +50,9 @@ namespace ChatSummarAI.API
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("OnlyForAdmin", policy =>
+                options.AddPolicy("OnlyForAfterAi", policy =>
                 {
-                    policy.RequireRole("admin");
+                    policy.RequireRole("afterAi");
                 });
                 options.AddPolicy("OnlyForActor", policy =>
                 {
